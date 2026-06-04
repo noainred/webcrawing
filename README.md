@@ -1,5 +1,7 @@
 # webcrawler
 
+[![CI](https://github.com/noainred/webcrawing/actions/workflows/ci.yml/badge.svg)](https://github.com/noainred/webcrawing/actions/workflows/ci.yml)
+
 HTML 기반의 가볍고 예의 바른(polite) 웹 크롤러입니다. 시작 URL에서 출발해
 링크를 너비 우선(BFS)으로 따라가며, 각 페이지를 BeautifulSoup으로 파싱해
 **제목 · 메타 설명 · 본문 텍스트 · 링크**를 추출합니다.
@@ -20,6 +22,9 @@ pip install -r requirements.txt
 
 # (선택) 패키지로 설치하면 `webcrawler` 명령을 쓸 수 있습니다
 pip install -e .
+
+# PyPI에 게시된 뒤에는 (DEPLOY.md 참고)
+pip install webcrawling
 ```
 
 의존성: `requests`, `beautifulsoup4`, `lxml`
@@ -58,6 +63,18 @@ webcrawler https://example.com -o result.csv
 | `-o, --output` | 결과 저장 파일 | 없음 |
 | `-f, --format` | `json` · `jsonl` · `csv` | 확장자로 추론 |
 | `-v` / `-vv` | 진행 / 디버그 로그 | 경고만 |
+
+## Docker로 실행
+
+```bash
+# 이미지 빌드
+docker build -t webcrawling .
+
+# 크롤링 실행 (결과를 현재 폴더로 받기)
+docker run --rm -v "$PWD:/out" webcrawling https://example.com -d 2 -o /out/result.json
+```
+
+CI가 버전 태그 푸시 시 `ghcr.io/noainred/webcrawing` 로도 이미지를 배포합니다(아래 참고).
 
 ## 라이브러리로 사용하기
 
@@ -120,6 +137,22 @@ tests/            # pytest (로컬 픽스처 서버로 end-to-end 검증)
 ```bash
 pip install pytest
 pytest -q
+```
+
+## 배포 (CI/CD)
+
+GitHub Actions로 **검증 → 자동 배포**가 구성되어 있습니다.
+
+- 모든 push/PR마다 Python 3.9–3.12에서 테스트 실행 (`ci.yml`)
+- `v*` 버전 태그를 push하면 **테스트 통과 후** 자동으로 배포 (`release.yml`):
+  - **GitHub Release** 에 wheel·sdist 첨부
+  - **GHCR** 에 Docker 이미지 push
+  - **PyPI** 에 패키지 게시
+
+릴리스 방법과 PyPI 1회 설정은 [`DEPLOY.md`](DEPLOY.md)를 참고하세요.
+
+```bash
+git tag v0.1.0 && git push origin v0.1.0   # 배포 자동 시작
 ```
 
 ## 책임 있는 크롤링 안내

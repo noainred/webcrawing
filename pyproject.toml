@@ -3,12 +3,31 @@ requires = ["setuptools>=61"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "webcrawler"
+# Distribution name on PyPI (the import package stays `webcrawler`, like
+# beautifulsoup4 -> bs4). "webcrawler" is already taken on PyPI; change this
+# to any name you own/can register before the first PyPI publish.
+name = "webcrawling"
 version = "0.1.0"
 description = "A small, polite, HTML-focused web crawler."
 readme = "README.md"
 requires-python = ">=3.9"
 license = { text = "MIT" }
+authors = [{ name = "noainred" }]
+keywords = ["crawler", "web-crawler", "scraper", "html", "spider", "beautifulsoup"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Internet :: WWW/HTTP :: Indexing/Search",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
 dependencies = [
     "requests>=2.28",
     "beautifulsoup4>=4.11",
@@ -16,7 +35,12 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=7.0"]
+dev = ["pytest>=7.0", "build>=1.0"]
+
+[project.urls]
+Homepage = "https://github.com/noainred/webcrawing"
+Repository = "https://github.com/noainred/webcrawing"
+Issues = "https://github.com/noainred/webcrawing/issues"
 
 [project.scripts]
 webcrawler = "webcrawler.cli:main"
